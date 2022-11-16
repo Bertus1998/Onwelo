@@ -1,0 +1,179 @@
+openapi: "3.0.2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /voters:
+    get:
+      operationId: getVoters
+      tags:
+        - Voters
+      description: "Get list of voters"
+      responses:
+        '200':
+          description: "Voters was send"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VotersListRs"
+    post:
+      operationId: createVoter
+      tags:
+        - Voters
+      description: "Create voter"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVoterRq"
+      responses:
+        200:
+          description: "Voters was created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoterRs"
+        500:
+          description: "Problem occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorRs"
+
+  /candidates:
+    get:
+      operationId: getCandidates
+      tags:
+        - Candidate
+      description: "Get list of candidates"
+      responses:
+        '200':
+          description: "Candidates was send"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CandidatesListRs"
+        '500':
+          description: "Problem occurred"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorRs"
+    post:
+      operationId: createCandidate
+      tags:
+        - Candidate
+      description: "Create candidate"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCandidateRq'
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CandidateRs"
+        500:
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorRs"
+
+  /voters/{voterId}/candidates/{candidateId}:
+    patch:
+      operationId: voteOnCandidate
+      tags:
+        - Voting
+      description: "Voter vote for candidate"
+      parameters:
+        - name: voterId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: candidateId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: "Successful operation"
+        '500':
+          description: "Problem occured"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorRs"
+
+
+
+components:
+  schemas:
+    CreateVoterRq:
+      type: object
+      properties:
+        firstName:
+          type: string
+        secondName:
+          type: string
+
+    CreateCandidateRq:
+      type: object
+      properties:
+        firstName:
+          type: string
+        secondName:
+          type: string
+
+    CandidateRs:
+      type: object
+      properties:
+        firstName:
+          type: string
+        secondName:
+          type: string
+        id:
+          type: string
+          format: uuid
+        votesNumber:
+          type: integer
+
+    VoterRs:
+      type: object
+      properties:
+        firstName:
+          type: string
+        secondName:
+          type: string
+        id:
+          type: string
+          format: uuid
+        alreadyVoted:
+          type: boolean
+
+    CandidatesListRs:
+      type: array
+      items:
+        $ref: "#/components/schemas/CandidateRs"
+
+    VotersListRs:
+      type: array
+      items:
+        $ref: "#/components/schemas/VoterRs"
+
+    ErrorRs:
+      type: object
+      properties:
+        errorCode:
+          type: integer
+        comment:
+          type: string

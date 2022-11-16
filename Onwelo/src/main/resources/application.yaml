@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test
+    username: postgres
+    password: 123
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+        jdbc:
+          lob:
+            non_contextual_creation: true
+server:
+  servlet:
+    context-path: "/swagger-ui"
+
+logging.level.org.springframework.web: DEBUG
+logging.level.org.hibernate: ERROR
