@@ -1,0 +1,30 @@
+version: "2.3"
+services:
+    db-postgresql:
+        image: postgres:12
+        mem_limit: 1536MB
+        mem_reservation: 1G
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: 123
+        ports:
+            - "5442:5432"
+        volumes:
+            - db-data:/var/lib/postgresql/data
+        networks:
+            - my_network
+    pgadmin4:
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: itsNotEmail@email.pl
+            PGADMIN_DEFAULT_PASSWORD: 123
+        ports:
+            - "8889:80"
+        networks:
+            - my_network
+networks:
+    my_network:
+        driver: bridge
+
+volumes:
+    db-data:
