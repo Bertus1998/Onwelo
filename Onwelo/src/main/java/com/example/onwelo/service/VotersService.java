@@ -9,6 +9,7 @@ import com.example.onwelo.model.entity.VoterEntity;
 import com.example.onwelo.repository.VotersRepository;
 import com.example.onwelo.utils.Utils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.NotActiveException;
 import java.util.List;
@@ -25,11 +26,11 @@ public class VotersService {
     private final Utils utils;
     private final VotersRepository votersRepository;
     private final VotersMapper votersMapper;
-
+    @Transactional(readOnly = true)
     public List<VoterRs> findAllVoters() {
         return votersMapper.voterEntityListToRs(votersRepository.findAll());
     }
-
+    @Transactional(readOnly = true)
     VoterEntity findOrThrow(UUID id){
         return votersRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Voter with id = %s not found.", id)));

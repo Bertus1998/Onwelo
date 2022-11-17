@@ -5,7 +5,7 @@ import com.example.onwelo.model.CreateCandidateRq
 import com.example.onwelo.model.entity.CandidateEntity
 
 
-fun CreateCandidateRq.toEntity(): CandidateEntity = CandidateEntity(this.firstName,this.secondName)
+fun CreateCandidateRq.toEntity(): CandidateEntity = CandidateEntity(this.firstName, this.secondName)
 
 fun List<CandidateEntity>.toResponseList() = this.map { it.toResponse() }
 

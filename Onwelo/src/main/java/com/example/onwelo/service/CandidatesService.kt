@@ -10,18 +10,18 @@ import com.example.onwelo.model.CreateCandidateRq
 import com.example.onwelo.model.entity.CandidateEntity
 import com.example.onwelo.repository.CandidateRepository
 import com.example.onwelo.utils.Utils
-import lombok.RequiredArgsConstructor
+import lombok.AllArgsConstructor
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CandidatesService(
+@AllArgsConstructor
+ class CandidatesService(
     private val utils: Utils,
     private val candidateRepository: CandidateRepository
 ) {
-
-    fun findOrThrow(id: UUID): CandidateEntity {
+    open fun findOrThrow(id: UUID): CandidateEntity {
         return candidateRepository.findByIdOrNull(id)
             ?: throw EntityNotFoundException("Candidate with id $id was not found")
     }
@@ -30,8 +30,7 @@ class CandidatesService(
         validateCandidate(createCandidateRq)
         return candidateRepository.save(createCandidateRq.toEntity()).toResponse()
     }
-
-    fun findAllCandidates(): List<CandidateRs> {
+    open fun findAllCandidates(): List<CandidateRs> {
         return candidateRepository.findAll().toResponseList()
     }
 

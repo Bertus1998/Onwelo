@@ -1,15 +1,11 @@
 package com.example.onwelo.model.entity;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import javax.persistence.*;
 
 
 @Getter
@@ -20,8 +16,8 @@ import javax.persistence.Table;
 public class VoterEntity extends BaseEntity {
     private String firstName;
     private String secondName;
-    @JoinColumn(name = "candidates_id")
-    @ManyToOne
+
+    @ManyToOne( cascade = CascadeType.REMOVE)
     private CandidateEntity candidate;
 
     public VoterEntity(String firstName, String secondName) {
@@ -40,6 +36,10 @@ public class VoterEntity extends BaseEntity {
     }
 
     public VoterEntity withCandidate(CandidateEntity candidate) {
-        return VoterEntity.builder().candidate(candidate.addNewVotes(this)).build();
+         this.setCandidate(candidate.addNewVotes(this));
+         return this;
+    }
+    public void removeCandidate(){
+         this.setCandidate(null);
     }
 }

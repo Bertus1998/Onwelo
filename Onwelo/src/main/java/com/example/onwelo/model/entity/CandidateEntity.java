@@ -2,26 +2,21 @@ package com.example.onwelo.model.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name="candidates")
-@Builder
-@AllArgsConstructor
+@NoArgsConstructor
 public class CandidateEntity extends BaseEntity {
     @NotNull
     private String firstName;
     @NotNull
     private String secondName;
-    @OneToMany
-    @Builder.Default
-    private Set<VoterEntity> voters = new HashSet<VoterEntity>();
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy="candidate", orphanRemoval=true)
+    private Set<VoterEntity> voters;
 
     public Set<VoterEntity> getVoters() {
         return voters;
@@ -47,6 +42,7 @@ public class CandidateEntity extends BaseEntity {
     public CandidateEntity(String firstName, String secondName) {
         this.firstName = firstName;
         this.secondName = secondName;
+        this.voters = new HashSet<VoterEntity>();
     }
 
     public CandidateEntity addNewVotes(VoterEntity voterEntity){

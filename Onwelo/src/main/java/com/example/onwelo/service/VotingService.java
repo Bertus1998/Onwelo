@@ -26,7 +26,22 @@ public class VotingService {
     public void executeVoting(UUID voterId, UUID candidateId) {
         VoterEntity voters = votersService.findOrThrow(voterId);
         CandidateEntity candidate = candidatesService.findOrThrow(candidateId);
-        updateVoting(voters.withCandidate(candidate));
+
+        boolean relatedAlready = voters.getCandidate() != null;
+        boolean sameCandidateAsAlready = false;
+
+        if (relatedAlready) {
+            sameCandidateAsAlready = voters.getCandidate().getId() == candidateId;
+        }
+
+        if (!sameCandidateAsAlready) {
+            voters.removeCandidate();
+            votersRepository.save(voters);
+        }
+
+        if (!sameCandidateAsAlready) {
+            updateVoting(voters.withCandidate(candidate));
+        }
     }
 
     private void updateVoting(VoterEntity voter) {
